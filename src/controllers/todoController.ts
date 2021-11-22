@@ -8,6 +8,19 @@ export const getAll = async (req: Request, res: Response) => {
 
 }
 
+export const getOne = async (req: Request, res: Response) => {
+
+    const id: string = req.params.id;
+    let todo = await Todo.findByPk(id);
+
+    if (todo) {
+        res.status(200).json({ todo });
+    }
+
+    res.status(404).json({ error: 'Item não encontrado' });
+
+}
+
 export const store = async (req: Request, res: Response) => {
 
     if (req.body.title) {
@@ -20,7 +33,7 @@ export const store = async (req: Request, res: Response) => {
         res.status(201).json({ item: newTodo });
     }
 
-    res.status(400).json({ error: 'Dados não enviados.' });
+    res.status(400).json({ message:'Cadastrado com sucesso.', error: 'Dados não enviados.' });
 }
 
 export const update = async (req: Request, res: Response) => {
@@ -48,7 +61,7 @@ export const update = async (req: Request, res: Response) => {
         }
 
         await todo.save();
-        res.status(200).json({ item: todo });
+        res.status(200).json({ message:'Atualizado com sucesso.', item: todo });
 
     } else {
         res.status(404).json({ error: 'Item não encontrado'})
@@ -62,7 +75,7 @@ export const remove = async (req: Request, res: Response) => {
 
     if (todo) {
         await todo.destroy();
-        res.status(200).json({ error: 'Sucesso ao deletar' });
+        res.status(200).json({ message: 'Deletado com sucesso.' });
     }
 
     res.status(404).json({ error: 'Item não encontrado' });
