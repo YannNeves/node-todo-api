@@ -55,6 +55,15 @@ export const update = async (req: Request, res: Response) => {
     }
 }
 
-export const remove = async () => {
+export const remove = async (req: Request, res: Response) => {
+    const id: string = req.params.id;
     
+    let todo = await Todo.findByPk(id);
+
+    if (todo) {
+        await todo.destroy();
+        res.status(200).json({ error: 'Sucesso ao deletar' });
+    }
+
+    res.status(404).json({ error: 'Item não encontrado' });
 }
